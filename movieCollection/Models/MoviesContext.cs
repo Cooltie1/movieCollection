@@ -14,16 +14,35 @@ namespace movieCollection.Models
         }
 
         public DbSet<Movie> movies { get; set; }
-
+        public DbSet<Category> categories { get; set; }
         protected override void OnModelCreating(ModelBuilder mb)
         {
+
+            mb.Entity<Category>().HasData(
+                new Category
+                {
+                    categoryID = 1,
+                    categoryName = "Action/Adventure"
+                }, 
+                new Category
+                {
+                    categoryID = 2,
+                    categoryName = "Comedy"
+                },
+                new Category
+                {
+                    categoryID = 3,
+                    categoryName = "Drama"
+                }
+                );
+
             mb.Entity<Movie>().HasData(
 
                 new Movie
                 {
                     movieID = 1,
                     title = "Batman",
-                    category = "Action/Adventure",
+                    categoryID = 1,
                     year = 1989,
                     director = "Tim Burton",
                     rating = "PG-13",
@@ -35,7 +54,7 @@ namespace movieCollection.Models
                 {
                     movieID = 2,
                     title = "Batman & Robin",
-                    category = "Action/Adventure",
+                    categoryID = 1,
                     year = 1997,
                     director = "Joel Schumacher",
                     rating = "PG-13",
@@ -47,7 +66,7 @@ namespace movieCollection.Models
                 {
                     movieID = 3,
                     title = "Batman Begins",
-                    category = "Action/Adventure",
+                    categoryID = 1,
                     year = 2005,
                     director = "Christopher Nolan",
                     rating = "PG-13",

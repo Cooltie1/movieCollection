@@ -15,7 +15,9 @@ namespace movieCollection.Models
         public string title { get; set; }
 
         [Required(ErrorMessage = "Category is required")]
-        public string category { get; set; }
+        public int categoryID { get; set; }
+
+        public Category category { get; set; }
 
         [Required(ErrorMessage = "Year is required")]
         [Range(1900, 2030, ErrorMessage = "Year Must be between 1900 and 2030")]

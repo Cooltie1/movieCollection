@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using movieCollection.Models;
 using System;
@@ -34,13 +35,53 @@ namespace movieCollection.Controllers
                 _movieContext.SaveChanges();
                 return View("Confirmation");
             }
+            ViewBag.categories = _movieContext.categories.ToList();
             return View("Movies");
             
         }
         [HttpGet]
         public IActionResult Movies()
         {
+            ViewBag.categories = _movieContext.categories.ToList();
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult MovieList()
+        {
+            var movies = _movieContext.movies
+                .Include(x => x.category)
+                .OrderBy(x => x.title)
+                .ToList();
+            return View(movies);
+        }
+
+        [HttpPost]
+        public IActionResult Edit (Movie movie)
+        {
+            _movieContext.Update(movie);
+            _movieContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int movieid)
+        {
+            ViewBag.categories = _movieContext.categories.ToList();
+
+            var movie = _movieContext.movies.Single(x => x.movieID == movieid);
+
+            return View("Movies", movie);
+        }
+
+
+        public IActionResult Delete(int movieid)
+        {
+            _movieContext.movies.Remove(_movieContext.movies.Single(x => x.movieID == movieid));
+            _movieContext.SaveChanges();
+            return RedirectToAction("MovieList");
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
